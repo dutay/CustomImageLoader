@@ -75,7 +75,16 @@ public class BitmapDispatcher extends Thread {
     }
 
     private void showImageView(BitmapRequest br, final Bitmap bitmap) {
-        if (br != null && bitmap != null && br.getImageView() != null && br.getUrlMD5().equals(br.getImageView().getTag())) {
+        if (br != null  &&  br.getImageView() != null && br.getUrlMD5().equals(br.getImageView().getTag())) {
+            if (br.getRequestListener()!=null){
+                RequestListener requestListener= br.getRequestListener();
+                if (bitmap==null){
+                    requestListener.onFailed();
+                }else {
+                    requestListener.onSuccess(bitmap);
+                }
+            }
+
             final ImageView imageView = br.getImageView();
             handler.post(new Runnable() {
                 @Override
